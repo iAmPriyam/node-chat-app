@@ -13,6 +13,7 @@ const getCurrentUser = id => {
 const userLeaves = id => {
     const index = users.findIndex(user => id !== user.id);
     if (index !== -1) {
+        // console.log(users.splice(index, 1)[0]);
         return users.splice(index, 1)[0];
     }
 };

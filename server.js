@@ -3,7 +3,7 @@ const path = require("path");
 const http = require("http");
 const socketio = require("socket.io");
 const formatMessage = require("./utils/messages");
-const botName = "Chord Bot";
+const botName = "ChatBot";
 const {
     userJoin,
     getCurrentUser,
@@ -28,17 +28,17 @@ io.on("connection", socket => {
         socket.join(room);
 
         socket.emit(
-            "message",
+            "notification",
             formatMessage(botName, `Welcome to Chat Chord! ${user.username}`)
         );
 
         socket.broadcast
             .to(user.room)
             .emit(
-                "message",
+                "notification",
                 formatMessage(
                     user.username,
-                    `${user.username} has joined the chat!`
+                    `${user.username} has joined  ${user.room}!`
                 )
             );
 
@@ -49,24 +49,28 @@ io.on("connection", socket => {
 
         //Listen for chat message
         socket.on("chatMessage", message => {
-            console.log(message);
+            // console.log(message);
             //Emit the recieved message to evrybody!!
-            io.to(user.room).emit(
-                "message",
-                formatMessage(user.username, message)
-            );
+            socket.broadcast
+                .to(user.room)
+                .emit("message", formatMessage(user.username, message));
+            socket.emit("messageSelf", formatMessage(user.username, message));
         });
 
         socket.on("disconnect", () => {
+            const currentUser = getCurrentUser(socket.id);
             const user = userLeaves(socket.id);
-            if (user) {
-                io.to(user.room).emit(
-                    "message",
-                    formatMessage(
-                        botName,
-                        `${user.username} has left the chat!`
-                    )
-                );
+            // console.log(currentUser + ": from server");
+            if (currentUser) {
+                socket.broadcast
+                    .to(currentUser.room)
+                    .emit(
+                        "notification",
+                        formatMessage(
+                            botName,
+                            `${currentUser.username} has left the chat!`
+                        )
+                    );
             }
         });
     });

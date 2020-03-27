@@ -15,8 +15,20 @@ socket.emit("joinRoom", { username, room });
 
 //Listen to messages from server
 socket.on("message", message => {
-    console.log(message.text);
+    // console.log(message.text);
     output(message);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+});
+
+socket.on("messageSelf", message => {
+    // console.log(message.text, ": to self");
+    outputSelf(message);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+});
+
+socket.on("notification", message => {
+    // console.log(message.text, ": to notice");
+    notify(message);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
@@ -46,6 +58,32 @@ const output = message => {
     div.innerHTML = `<p class="meta">${name} <span>${time}</span></p>
     <p class="text">
        ${message.text}
+    </p>`;
+    document.querySelector(".chat-messages").appendChild(div);
+};
+
+const outputSelf = message => {
+    const div = document.createElement("div");
+    const name = message.username;
+    const t = new Date();
+    const time = message.time;
+    div.classList.add("self");
+    div.innerHTML = `<p class="meta">${name} <span>${time}</span></p>
+    <p class="text">
+       ${message.text}
+    </p>`;
+    document.querySelector(".chat-messages").appendChild(div);
+};
+
+const notify = message => {
+    const div = document.createElement("div");
+    const name = message.username;
+    const t = new Date();
+    const time = message.time;
+    div.classList.add("notification");
+    div.innerHTML = `
+    <p class="text">
+    <span>${time}</span> ${message.text}
     </p>`;
     document.querySelector(".chat-messages").appendChild(div);
 };
