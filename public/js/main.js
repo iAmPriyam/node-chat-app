@@ -55,7 +55,7 @@ const output = message => {
     const t = new Date();
     const time = message.time;
     div.classList.add("message");
-    div.innerHTML = `<p class="meta">${name} <span>${time}</span></p>
+    div.innerHTML = `<p class="meta" >${name} <span >${time}</span></p>
     <p class="text">
        ${message.text}
     </p>`;
@@ -68,7 +68,7 @@ const outputSelf = message => {
     const t = new Date();
     const time = message.time;
     div.classList.add("self");
-    div.innerHTML = `<p class="meta">${name} <span>${time}</span></p>
+    div.innerHTML = `<p class="meta" style="color: #6589ff"> <span >${time}</span> ${name}</p>
     <p class="text">
        ${message.text}
     </p>`;
@@ -82,7 +82,7 @@ const notify = message => {
     const time = message.time;
     div.classList.add("notification");
     div.innerHTML = `
-    <p class="text">
+    <p class="text" >
     <span>${time}</span> ${message.text}
     </p>`;
     document.querySelector(".chat-messages").appendChild(div);
