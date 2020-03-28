@@ -290,9 +290,20 @@ a {
         display: none;
     }
 
+    .chat-container {
+        width: 80%;
+    }
+
     .join-container {
         width: 70%;
         grid-template-columns: 1fr;
         grid-template-rows: auto auto;
+    }
+}
+
+@media (max-width: 500) {
+    .join-container,
+    .chat-containerwidth {
+        width: 100%;
     }
 }
