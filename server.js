@@ -18,6 +18,10 @@ const io = socketio(server);
 //Set static folders
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get("/", (req, res) => {
+    res.sendFile("index.html");
+});
+
 //Run when client connects
 io.on("connection", socket => {
     console.log("New connection...");
@@ -76,7 +80,7 @@ io.on("connection", socket => {
     });
 });
 
-const PORT = 3000 || process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, "0.0.0.0", () => {
     console.log(`app listening on ${PORT}`);
